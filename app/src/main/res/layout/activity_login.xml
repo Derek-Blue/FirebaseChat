@@ -59,7 +59,7 @@
             android:layout_height="wrap_content"
             android:text="登入"
             android:id="@+id/btn_login"
-            android:background="@color/colorPrimaryDark"
+            android:background="@color/colorBlue400"
             android:textColor="#FFFFFF"
             android:layout_marginTop="10dp"/>
 

@@ -1,13 +1,17 @@
 package com.example.firebasechat;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -24,15 +28,23 @@ public class LoginActivity extends AppCompatActivity {
 
     FirebaseAuth firebaseAuth;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        //獲取狀態欄改變背景顏色 API Level21(5.0)以下可能會報錯
+        Window window = this.getWindow();
+        window.setStatusBarColor(getResources().getColor(R.color.colorBlue500));
+
+        //ToolBar設定
         Toolbar actbar = findViewById(R.id.actbar);
         setSupportActionBar(actbar);
         getSupportActionBar().setTitle("Login");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);//Toolbar設定返回鍵
+        actbar.setTitleTextColor(Color.WHITE);
+        actbar.setBackgroundColor(getResources().getColor(R.color.colorBlue400));
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -56,6 +68,7 @@ public class LoginActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()){
                                         Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                                        //釋放掉目前所有Activity，僅保留主連結目標(MainActivity)
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                         startActivity(intent);
                                         finish();
@@ -68,4 +81,5 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
 }

@@ -6,13 +6,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
+    android:background="@color/colorPrimary"
     tools:context=".StartActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Chatroom"
+        android:text="呱呱"
         android:textStyle="bold"
+        android:textColor="#FFF"
         android:textSize="25dp" />
 
     <Button
@@ -20,6 +22,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="#FFF"
         android:text="登入"/>
 
     <Button
@@ -27,6 +31,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="#FFF"
         android:text="註冊"/>
 
 </LinearLayout>

@@ -1,14 +1,17 @@
 package com.example.firebasechat;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.Manifest;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -31,15 +34,23 @@ public class RegisterActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     DatabaseReference reference;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        //獲取狀態欄改變背景顏色,  API Level21(5.0)以下可能會報錯
+        Window window = this.getWindow();
+        window.setStatusBarColor(getResources().getColor(R.color.colorGreen500));
+
+        //ToolBar設定
         Toolbar actbar = findViewById(R.id.actbar);
         setSupportActionBar(actbar);
         getSupportActionBar().setTitle("Register");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);//Toolbar設定返回鍵
+        actbar.setTitleTextColor(Color.WHITE);
+        actbar.setBackgroundColor(getResources().getColor(R.color.colorGreen400));
 
         username = findViewById(R.id.username);
         email = findViewById(R.id.email);
@@ -67,7 +78,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void register(final String username, String email, String password){
+    private void register(final String username, final String email, String password){
 
         firebaseAuth.createUserWithEmailAndPassword(email,password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -80,6 +91,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                             reference = FirebaseDatabase.getInstance().getReference("Users").child(userID);
 
+                            //將資料建立到Database
                             HashMap<String , String> hashMap = new HashMap<>();
                             hashMap.put("id", userID);
                             hashMap.put("username" , username);
@@ -88,15 +100,18 @@ public class RegisterActivity extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if(task.isSuccessful()){
+                                                //註冊成功後自動連結主畫面
                                                 Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                                                //釋放掉目前所有Activity，僅保留主連結目標(MainActivity)
                                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                                 startActivity(intent);
+                                                finish();
                                             }
                                         }
                                     });
 
                         }else {
-                            Toast.makeText(RegisterActivity.this, "錯誤的信箱 or 密碼",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterActivity.this, email+" 此信箱已註冊",Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
