@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="text_dark">#4a4a4a</color>
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="colorBlue400">#6690FF</color>
     <color name="colorBlue500">#3366FF</color>
+    <color name="colorGreen100">#F2FDD4</color>
     <color name="colorGreen400">#8AE96E</color>
     <color name="colorGreen500">#58DB41</color>
+    <color name="colorOrange200">#FEEC9D</color>
+    <color name="colorOrange400">#FACE46</color>
+    <color name="colorOrange500">#f7b70b</color>
 </resources>

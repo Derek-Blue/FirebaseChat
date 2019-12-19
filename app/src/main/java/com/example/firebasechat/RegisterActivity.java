@@ -87,13 +87,13 @@ public class RegisterActivity extends AppCompatActivity {
                         if(task.isSuccessful()){
                             FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
                             assert firebaseUser != null;
-                            String userID = firebaseUser.getUid();
+                            String user_ID = firebaseUser.getUid();
 
-                            reference = FirebaseDatabase.getInstance().getReference("Users").child(userID);
+                            reference = FirebaseDatabase.getInstance().getReference("Users").child(user_ID);
 
                             //將資料建立到Database
                             HashMap<String , String> hashMap = new HashMap<>();
-                            hashMap.put("id", userID);
+                            hashMap.put("id", user_ID);
                             hashMap.put("username" , username);
                             hashMap.put("imageURL" , "default");
                             reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
