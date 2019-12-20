@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#E7EFF8"
     tools:context=".MessageActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/barlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -36,5 +38,40 @@
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/recycle_view"
+        android:layout_below="@id/barlayout"
+        android:layout_above="@+id/bottom"/>
+
+    <RelativeLayout
+        android:id="@+id/bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_alignParentBottom="true"
+        android:background="#FFF">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/text_send"
+            android:layout_toLeftOf="@+id/btn_send"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            android:hint="輸入訊息..."/>
+
+        <ImageButton
+            android:background="@drawable/ic_action_send"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/btn_send"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"/>
+
+
+    </RelativeLayout>
 
 </RelativeLayout>
