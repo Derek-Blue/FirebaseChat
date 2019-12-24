@@ -40,7 +40,7 @@ public class UsersFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_users,container,false);
 
         recyclerView = view.findViewById(R.id.recycleview);
-        recyclerView.setHasFixedSize(true);//大小不取決於Adapter的內容
+        recyclerView.setHasFixedSize(true);//大小不取決於Adapter的內容 確保顯示大小一致
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mUsers = new ArrayList<>();

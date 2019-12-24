@@ -40,7 +40,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        //獲取狀態欄改變背景顏色,  API Level21(5.0)以下可能會報錯
+        //獲取狀態欄改變背景顏色,  API Level 21(5.0)以下可能會報錯
         Window window = this.getWindow();
         window.setStatusBarColor(getResources().getColor(R.color.colorGreen500));
 
@@ -89,10 +89,12 @@ public class RegisterActivity extends AppCompatActivity {
                             assert firebaseUser != null;
                             String user_ID = firebaseUser.getUid();
 
+                            //Database實例化 建立的資料會存在Users根目錄下
                             reference = FirebaseDatabase.getInstance().getReference("Users").child(user_ID);
 
                             //將資料建立到Database
                             HashMap<String , String> hashMap = new HashMap<>();
+                            //上傳後會依此命名建立子目錄
                             hashMap.put("id", user_ID);
                             hashMap.put("username" , username);
                             hashMap.put("imageURL" , "default");

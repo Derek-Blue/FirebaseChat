@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
             //監聽資料變動
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //User.Class是自建模組  使用DataSnapshot 取得Database裡所有data資料
+                //User.Class是自建模組  DataSnapshot取得Database裡所有data資料
                 User user = dataSnapshot.getValue(User.class);
                 username.setText(user.getUsername());
                 if(user.getImageURL().equals("default")){
@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
+    //viewPager 適配器
     class ViewPagerAdapter extends FragmentPagerAdapter {
 
         private ArrayList<Fragment> fragments;
