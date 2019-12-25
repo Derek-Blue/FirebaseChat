@@ -41,7 +41,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     @Override
     public MessageAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        //設定本機端使用者的發言 顯示在右邊
+        //設定本機端使用者的發言顯示在右邊　好友(對方)的發言在左邊　
         if(viewType == MSG_TYPE_RIGHT) {
             View view = LayoutInflater.from(context).inflate(R.layout.chat_item_right,parent,false);
             return new MessageAdapter.ViewHolder(view);

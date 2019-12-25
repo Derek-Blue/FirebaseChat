@@ -68,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()){
                                         Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                                        //釋放掉目前所有Activity，僅保留主連結目標(MainActivity)
+                                        //釋放掉目前所有Activity，僅保留此次intent的目標(MainActivity)
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                         startActivity(intent);
                                         finish();

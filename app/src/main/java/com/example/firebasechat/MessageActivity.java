@@ -76,7 +76,7 @@ public class MessageActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycle_view);
         recyclerView.setHasFixedSize(true);//大小不取決於Adapter的內容 確保顯示大小一致
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-        linearLayoutManager.setStackFromEnd(true);//recyclerView新添加的item往下新增;聊天內容由上往下顯示
+        linearLayoutManager.setStackFromEnd(true);//recyclerView新添加的item從下方新增;聊天內容由下往上新增
         recyclerView.setLayoutManager(linearLayoutManager);
 
         profile_image = findViewById(R.id.profile_image);
@@ -129,7 +129,7 @@ public class MessageActivity extends AppCompatActivity {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
         HashMap<String , Object> hashMap = new HashMap<>();
-        //上傳後會依下列"名稱"建立子目錄
+        //上傳後會依下列"名稱"建立節點及對應值
         hashMap.put("sender" , sender);
         hashMap.put("receiver" , receiver);
         hashMap.put("Message" , Message);
@@ -139,9 +139,10 @@ public class MessageActivity extends AppCompatActivity {
     }
 
     private void readMessage(final String myid, final String userid , final String imageurl){
+        //取出Database　chat資料
+
         mchat = new ArrayList<>();
 
-        //取出Database聊天資料
         reference = FirebaseDatabase.getInstance().getReference("Chats");
         reference.addValueEventListener(new ValueEventListener() {
             @Override

@@ -89,22 +89,22 @@ public class RegisterActivity extends AppCompatActivity {
                             assert firebaseUser != null;
                             String user_ID = firebaseUser.getUid();
 
-                            //Database實例化 建立的資料會存在Users根目錄下
+                            //連結到資料庫　建立的資料會存在"Users"根目錄下　子目錄以(user_ID)命名
                             reference = FirebaseDatabase.getInstance().getReference("Users").child(user_ID);
 
-                            //將資料建立到Database
                             HashMap<String , String> hashMap = new HashMap<>();
-                            //上傳後會依此命名建立子目錄
+                            //上傳後會依下列"名稱"建立節點及對應值
                             hashMap.put("id", user_ID);
                             hashMap.put("username" , username);
                             hashMap.put("imageURL" , "default");
+                            //將資料建立到Database
                             reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if(task.isSuccessful()){
                                                 //註冊成功後自動連結主畫面
                                                 Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                                                //釋放掉目前所有Activity，僅保留主連結目標(MainActivity)
+                                                //釋放掉目前所有Activity，僅保留此次intent的目標(MainActivity)
                                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                                 startActivity(intent);
                                                 finish();

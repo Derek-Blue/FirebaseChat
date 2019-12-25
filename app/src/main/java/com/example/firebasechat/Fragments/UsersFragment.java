@@ -60,7 +60,7 @@ public class UsersFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 mUsers.clear();//避免資料重複
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){//遍歷所有快取的資料
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     User user = snapshot.getValue(User.class);
 
                     assert user != null;

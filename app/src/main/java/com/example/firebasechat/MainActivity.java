@@ -62,15 +62,14 @@ public class MainActivity extends AppCompatActivity {
 
         //取得目前登入的使用者物件
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        //取得資料庫裡的使用者資料
-        // child(firebaseUser.getUid()) 本機端使用者
+        //連結資料庫　　 child(firebaseUser.getUid()) 指向本機端使用者的資料
         reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
 
         reference.addValueEventListener(new ValueEventListener() {
             //監聽資料變動
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //User.Class是自建模組  DataSnapshot取得Database裡所有data資料
+                // DataSnapshot取得reference目前指定的目錄或節點下資料　節點下的資料内容以嵌套方式映射到User.Class容器
                 User user = dataSnapshot.getValue(User.class);
                 username.setText(user.getUsername());
                 if(user.getImageURL().equals("default")){

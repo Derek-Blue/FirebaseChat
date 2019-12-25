@@ -2,6 +2,7 @@ package com.example.firebasechat.Model;
 
 public class User {
 
+    //在此宣告的變數名稱必須與建構Database的標籤名稱相同(大小寫一致),否則取不出資料
     private String id;
     private String username;
     private String imageURL;
