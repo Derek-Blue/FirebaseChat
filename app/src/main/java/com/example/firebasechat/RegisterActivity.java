@@ -97,6 +97,8 @@ public class RegisterActivity extends AppCompatActivity {
                             hashMap.put("id", user_ID);
                             hashMap.put("username" , username);
                             hashMap.put("imageURL" , "default");
+                            hashMap.put("status" , "offline");
+
                             //將資料建立到Database
                             reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
@@ -104,7 +106,7 @@ public class RegisterActivity extends AppCompatActivity {
                                             if(task.isSuccessful()){
                                                 //註冊成功後自動連結主畫面
                                                 Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                                                //釋放掉目前所有Activity，僅保留此次intent的目標(MainActivity)
+                                                //釋放掉目前執行Activity的Task | 並開啟一個新的Task去執行此次intent的目標(MainActivity)
                                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                                 startActivity(intent);
                                                 finish();

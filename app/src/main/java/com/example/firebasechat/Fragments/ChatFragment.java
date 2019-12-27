@@ -81,7 +81,7 @@ public class ChatFragment extends Fragment {
 
         return view;
     }
-    //顯示聊天紀錄
+    //有過聊天紀錄的好友 顯示連結在聊天Fragment
     private void readChats(){
         mUser = new ArrayList<>();
 
@@ -110,7 +110,7 @@ public class ChatFragment extends Fragment {
                     }
                 }
 
-                userAdapter = new UserAdapter(getContext(), mUser);
+                userAdapter = new UserAdapter(getContext(), mUser,true);
                 recyclerView.setAdapter(userAdapter);
             }
 

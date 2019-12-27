@@ -33,6 +33,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
                 if(user.getImageURL().equals("default")){
                     profile_image.setImageResource(R.mipmap.frog);
                 }else {
-                    Glide.with(MainActivity.this).load(user.getImageURL()).into(profile_image);
+                    Glide.with(getApplicationContext()).load(user.getImageURL()).into(profile_image);
                 }
             }
 
@@ -93,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
 
         viewPagerAdapter.addFragment(new ChatFragment(),"聊天");
         viewPagerAdapter.addFragment(new UsersFragment(),"好友");
-        viewPagerAdapter.addFragment(new ProfileFragment(),"Profile");
+        viewPagerAdapter.addFragment(new ProfileFragment(),"個人檔案");
 
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
@@ -110,7 +111,10 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.logout:
                 FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(MainActivity.this , StartActivity.class));
+                Intent intent = new Intent(MainActivity.this, StartActivity.class);
+                //釋放掉在此intent前開啟的Activity
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
                 finish();
                 return true;
         }
@@ -151,4 +155,25 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void status(String status){
+        //判斷離線/上線
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+
+        HashMap<String,Object> map = new HashMap<>();
+        map.put("status", status);
+
+        reference.updateChildren(map);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        status("online");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        status("offline");
+    }
 }

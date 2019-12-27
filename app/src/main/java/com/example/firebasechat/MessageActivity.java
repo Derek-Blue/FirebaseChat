@@ -111,7 +111,7 @@ public class MessageActivity extends AppCompatActivity {
                 if(user.getImageURL().equals("default")){
                     profile_image.setImageResource(R.mipmap.frog);
                 }else {
-                    Glide.with(MessageActivity.this).load(user.getImageURL()).into(profile_image);
+                    Glide.with(getApplicationContext()).load(user.getImageURL()).into(profile_image);
                 }
 
                 readMessage(firebaseUser.getUid(),userID,user.getImageURL());
@@ -166,5 +166,26 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void status(String status){
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+
+        HashMap<String,Object> map = new HashMap<>();
+        map.put("status", status);
+
+        reference.updateChildren(map);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        status("online");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        status("offline");
     }
 }

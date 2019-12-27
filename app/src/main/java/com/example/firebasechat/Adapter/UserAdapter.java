@@ -22,10 +22,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     private Context context;
     private List<User> users;
+    //ischat用以判斷上線/離線
+    private boolean ischat;
 
-    public UserAdapter(Context context, List<User> users) {
+    public UserAdapter(Context context, List<User> users ,boolean ischat) {
         this.context = context;
         this.users = users;
+        this.ischat = ischat;
     }
 
     @NonNull
@@ -45,6 +48,20 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         }else {
             Glide.with(context).load(user.getImageURL()).into(holder.user_image);
         }
+
+        if(ischat){
+            if (user.getStatus().equals("online")){
+                holder.status_on.setVisibility(View.VISIBLE);
+                holder.status_off.setVisibility(View.GONE);
+            }else {
+                holder.status_on.setVisibility(View.GONE);
+                holder.status_off.setVisibility(View.VISIBLE);
+            }
+        }else {
+            holder.status_on.setVisibility(View.GONE);
+            holder.status_off.setVisibility(View.GONE);
+        }
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,12 +82,16 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
         public TextView name;
         public ImageView user_image;
+        private ImageView status_on;
+        private ImageView status_off;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             name = itemView.findViewById(R.id.name);
             user_image = itemView.findViewById(R.id.user_image);
+            status_on = itemView.findViewById(R.id.status_on);
+            status_off = itemView.findViewById(R.id.status_off);
         }
     }
 
