@@ -63,6 +63,17 @@
             android:textColor="#FFFFFF"
             android:layout_marginTop="10dp"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="忘記密碼?"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="end"
+            android:textStyle="bold"
+            android:textColor="@color/colorRed300"
+            android:id="@+id/forgot_password"/>
+
 
 
 

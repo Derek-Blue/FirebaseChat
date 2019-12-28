@@ -12,4 +12,6 @@
     <color name="colorOrange200">#FEEC9D</color>
     <color name="colorOrange400">#FACE46</color>
     <color name="colorOrange500">#f7b70b</color>
+    <color name="colorRed300">#FD8F65</color>
+    <color name="colorRed500">#FF462D</color>
 </resources>

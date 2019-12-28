@@ -78,7 +78,7 @@ public class ProfileFragment extends Fragment {
                 User user = dataSnapshot.getValue(User.class);
                 userName.setText(user.getUsername());
                 if (user.getImageURL().equals("default")){
-                    userImage.setImageResource(R.mipmap.frog);
+                    userImage.setImageResource(R.mipmap.ic_launcher);
                 }else {
                     Glide.with(view.getContext().getApplicationContext()).load(user.getImageURL()).into(userImage);
                 }
@@ -105,6 +105,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void openImage() {
+        //開啟手機image資料夾
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -119,12 +120,12 @@ public class ProfileFragment extends Fragment {
     }
 
     private void uploadImage(){
+        //上傳圖片至Storage
         final ProgressDialog progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage("資料處理中 請稍候");
         progressDialog.show();
 
         if (imageUri != null){
-            //上傳至Storage
             //用系統時間為檔案命名 +"."+ 檔案類型
             final StorageReference mStorageReference = storageReference.child(System.currentTimeMillis() +"."+getFileExtension(imageUri));
 

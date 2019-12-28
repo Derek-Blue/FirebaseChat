@@ -58,7 +58,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         holder.show_message.setText(chat.getMessage());
 
         if (imageURL.equals("default")){
-            holder.item_image.setImageResource(R.mipmap.frog);
+            holder.item_image.setImageResource(R.mipmap.ic_launcher);
         }else {
             Glide.with(context).load(imageURL).into(holder.item_image);
         }

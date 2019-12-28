@@ -55,6 +55,7 @@ public class UsersFragment extends Fragment {
         readUsers();
 
         search_users = view.findViewById(R.id.search_users);
+        search_users.clearFocus();
         search_users.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -110,7 +111,7 @@ public class UsersFragment extends Fragment {
     }
 
     private void readUsers() {
-
+        //讀取使用者資料
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
 

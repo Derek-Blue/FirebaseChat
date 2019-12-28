@@ -11,7 +11,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:hint="搜尋..."
-        android:id="@+id/search_users"/>
+        android:id="@+id/search_users"
+        android:focusable="true"
+        android:focusableInTouchMode="true"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_below="@+id/search_users"
