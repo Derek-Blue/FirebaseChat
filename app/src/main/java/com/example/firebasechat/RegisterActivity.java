@@ -28,6 +28,7 @@ import java.util.HashMap;
 
 public class RegisterActivity extends AppCompatActivity {
 
+    //註冊頁
     EditText username,email,password;
     Button btn_register;
 
@@ -93,11 +94,12 @@ public class RegisterActivity extends AppCompatActivity {
                             reference = FirebaseDatabase.getInstance().getReference("Users").child(user_ID);
 
                             HashMap<String , String> hashMap = new HashMap<>();
-                            //上傳後會依下列"名稱"建立節點及對應值
+                            //上傳後會依下列"名稱"建立節點標籤及對應值
                             hashMap.put("id", user_ID);
                             hashMap.put("username" , username);
                             hashMap.put("imageURL" , "default");
                             hashMap.put("status" , "offline");
+                            hashMap.put("search" , username.toLowerCase());
 
                             //將資料建立到Database
                             reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {

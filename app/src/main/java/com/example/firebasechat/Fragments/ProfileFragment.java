@@ -48,6 +48,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class ProfileFragment extends Fragment {
 
+    //個人檔案
     CircleImageView userImage;
     TextView userName;
 

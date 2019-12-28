@@ -6,7 +6,15 @@
     android:background="@color/colorOrange200"
     tools:context=".Fragments.UsersFragment">
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:hint="搜尋..."
+        android:id="@+id/search_users"/>
+
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@+id/search_users"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/recycleview" />

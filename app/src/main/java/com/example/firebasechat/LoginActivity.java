@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 
+    //登入頁
     EditText email,password;
     Button btn_login;
 

@@ -6,11 +6,13 @@ public class Chat {
     private String sender;
     private String receiver;
     private String Message;
+    private boolean seen;
 
-    public Chat(String sender, String receiver, String Message) {
+    public Chat(String sender, String receiver, String Message, boolean seen) {
         this.sender = sender;
         this.receiver = receiver;
         this.Message = Message;
+        this.seen = seen;
     }
 
     public Chat() {
@@ -38,5 +40,13 @@ public class Chat {
 
     public void setMessage(String message) {
         this.Message = message;
+    }
+
+    public boolean isSeen() {
+        return seen;
+    }
+
+    public void setSeen(boolean seen) {
+        this.seen = seen;
     }
 }

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
@@ -52,6 +53,8 @@ public class MessageActivity extends AppCompatActivity {
 
     Intent intent;
 
+    ValueEventListener seenListener;
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +72,11 @@ public class MessageActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                //停止監聽顯示已讀的功能
+                reference.removeEventListener(seenListener);
+                Intent i = new Intent(MessageActivity.this, MainActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);   //釋放掉在此intent前開啟的Activity
+                startActivity(i);
             }
         });
 
@@ -122,10 +129,36 @@ public class MessageActivity extends AppCompatActivity {
 
             }
         });
+
+        seenMessage(userID);
+    }
+
+    private void seenMessage(final String id){
+        //顯示已讀功能
+        reference = FirebaseDatabase.getInstance().getReference("Chats");
+        seenListener = reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Chat chat = snapshot.getValue(Chat.class);
+                    if(chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(id)){
+                        HashMap<String, Object> hashMap = new HashMap<>();
+                        hashMap.put("seen", true);
+                        snapshot.getRef().updateChildren(hashMap);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void sendMessage(String sender , String receiver , String Message){
 
+        //聊天資料傳到Database
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
         HashMap<String , Object> hashMap = new HashMap<>();
@@ -133,6 +166,7 @@ public class MessageActivity extends AppCompatActivity {
         hashMap.put("sender" , sender);
         hashMap.put("receiver" , receiver);
         hashMap.put("Message" , Message);
+        hashMap.put("seen" , false);
 
         //聊天資料上傳Database ; 建立並放置於Chats根目錄下
         reference.child("Chats").push().setValue(hashMap);
@@ -169,6 +203,7 @@ public class MessageActivity extends AppCompatActivity {
     }
 
     private void status(String status){
+        //監控上線/離線
         reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
 
         HashMap<String,Object> map = new HashMap<>();
@@ -187,5 +222,18 @@ public class MessageActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         status("offline");
+        //停止監聽顯示已讀的功能
+        reference.removeEventListener(seenListener);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        //停止監聽顯示已讀的功能
+        reference.removeEventListener(seenListener);
+        Intent i = new Intent(MessageActivity.this, MainActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
+
+        return super.onKeyDown(keyCode, event);
     }
 }

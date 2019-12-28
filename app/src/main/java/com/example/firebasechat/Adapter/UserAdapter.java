@@ -22,7 +22,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     private Context context;
     private List<User> users;
-    //ischat用以判斷上線/離線
+
     private boolean ischat;
 
     public UserAdapter(Context context, List<User> users ,boolean ischat) {
@@ -49,6 +49,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             Glide.with(context).load(user.getImageURL()).into(holder.user_image);
         }
 
+         //判斷上線/離線
         if(ischat){
             if (user.getStatus().equals("online")){
                 holder.status_on.setVisibility(View.VISIBLE);

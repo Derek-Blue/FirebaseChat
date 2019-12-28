@@ -30,6 +30,7 @@ import java.util.List;
 
 public class ChatFragment extends Fragment {
 
+    //聊天列表
     private RecyclerView recyclerView;
 
     private UserAdapter userAdapter;

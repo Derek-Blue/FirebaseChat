@@ -63,6 +63,14 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             Glide.with(context).load(imageURL).into(holder.item_image);
         }
 
+        //顯示已讀功能
+        if(chat.isSeen()){
+            holder.text_seen.setText("已讀");
+        }else{
+            holder.text_seen.setText(" ");
+        }
+
+
     }
 
     @Override
@@ -75,11 +83,14 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         public TextView show_message;
         public ImageView item_image;
 
+        public TextView text_seen;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             show_message = itemView.findViewById(R.id.show_message);
             item_image = itemView.findViewById(R.id.item_image);
+            text_seen = itemView.findViewById(R.id.text_seen);
         }
     }
 
