@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.example.firebasechat.Adapter.UserAdapter;
 import com.example.firebasechat.Model.Chat;
+import com.example.firebasechat.Model.Chatlist;
 import com.example.firebasechat.Model.User;
 import com.example.firebasechat.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,7 +40,7 @@ public class ChatFragment extends Fragment {
     FirebaseUser firebaseUser;
     DatabaseReference reference;
 
-    private List<String> usersList;
+    private List<Chatlist> list_sender;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,66 +53,49 @@ public class ChatFragment extends Fragment {
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        usersList = new ArrayList<>();
+        list_sender = new ArrayList<>();
 
-        reference = FirebaseDatabase.getInstance().getReference("Chats");
+        reference = FirebaseDatabase.getInstance().getReference("Chatlist").child(firebaseUser.getUid());
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                usersList.clear();//先清除　避免資料重複
-
+                list_sender.clear();
+                //先取得有過聊天記錄的ID
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    Chat chat = snapshot.getValue(Chat.class);
-                    //先將有共同聊天紀錄的id集合到一組Array
-                    if(chat.getSender().equals(firebaseUser.getUid())){
-                        usersList.add(chat.getReceiver());
-                    }
-                    if (chat.getReceiver().equals(firebaseUser.getUid())){
-                        usersList.add(chat.getSender());
-                    }
+                    Chatlist chatlist = snapshot.getValue(Chatlist.class);
+                    list_sender.add(chatlist);
                 }
 
-                readChats();
+                chatListDisplay();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
 
         return view;
     }
-    //有過聊天紀錄的好友 顯示連結在聊天Fragment
-    private void readChats(){
+
+
+    //與對像使用者有過聊天紀錄後 顯示與該使用者的聊天室連結
+    private void chatListDisplay() {
         mUser = new ArrayList<>();
 
         reference = FirebaseDatabase.getInstance().getReference("Users");
-
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mUser.clear();
-
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    User dataUser = snapshot.getValue(User.class);
-
-                    for (String id : usersList){
-                        if (dataUser.getId().equals(id)){     //所有id 比對 有過聊天紀錄的id
-                            if(mUser.size() != 0){            //如果容器內有資料　容器內的id在進行一次比對
-                                for (User user1 : mUser){
-                                    if (!dataUser.getId().equals(user1.getId())){
-                                        mUser.add(dataUser);
-                                    }
-                                }
-                            } else {
-                                mUser.add(dataUser);
-                            }
+                    User user = snapshot.getValue(User.class);
+                    for (Chatlist chatlist : list_sender){
+                        if (user.getId().equals(chatlist.getChatwith())){
+                            mUser.add(user);
                         }
                     }
                 }
-
-                userAdapter = new UserAdapter(getContext(), mUser,true);
+                userAdapter = new UserAdapter(getContext(), mUser, true);
                 recyclerView.setAdapter(userAdapter);
             }
 
@@ -121,5 +105,6 @@ public class ChatFragment extends Fragment {
             }
         });
     }
+
 
 }

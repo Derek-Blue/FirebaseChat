@@ -13,8 +13,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.firebasechat.MessageActivity;
+import com.example.firebasechat.Model.Chat;
 import com.example.firebasechat.Model.User;
 import com.example.firebasechat.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
@@ -24,6 +32,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private List<User> users;
 
     private boolean ischat;
+
+    String theLastMesagge;
 
     public UserAdapter(Context context, List<User> users ,boolean ischat) {
         this.context = context;
@@ -47,6 +57,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             holder.user_image.setImageResource(R.mipmap.ic_launcher);
         }else {
             Glide.with(context).load(user.getImageURL()).into(holder.user_image);
+        }
+
+        //顯示最後一則留言
+        if (ischat){
+            setLastMesagge(user.getId(), holder.last_mag);
+        }else {
+            holder.last_mag.setVisibility(View.GONE);
         }
 
          //判斷上線/離線
@@ -85,6 +102,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         public ImageView user_image;
         private ImageView status_on;
         private ImageView status_off;
+        private TextView last_mag;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -93,7 +111,44 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             user_image = itemView.findViewById(R.id.user_image);
             status_on = itemView.findViewById(R.id.status_on);
             status_off = itemView.findViewById(R.id.status_off);
+            last_mag = itemView.findViewById(R.id.last_msg);
         }
+    }
+
+    private void setLastMesagge(final String userid , final TextView last_msg){
+        //顯示最後一則留言
+        theLastMesagge = "default";
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Chats");
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Chat chat = snapshot.getValue(Chat.class);
+                    if (chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userid) ||
+                            chat.getReceiver().equals(userid) && chat.getSender().equals(firebaseUser.getUid())){
+                        theLastMesagge = chat.getMessage();
+                    }
+                }
+
+                switch (theLastMesagge){
+                    case "default":
+                        last_msg.setText("No Messager");
+                        break;
+                    default:
+                        last_msg.setText(theLastMesagge);
+                        break;
+                }
+
+                theLastMesagge = "default";
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }

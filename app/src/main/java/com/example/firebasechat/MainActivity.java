@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void status(String status){
-        //判斷離線/上線
+        //監控上線/離線
         reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
 
         HashMap<String,Object> map = new HashMap<>();

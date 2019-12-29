@@ -55,7 +55,7 @@ public class UsersFragment extends Fragment {
         readUsers();
 
         search_users = view.findViewById(R.id.search_users);
-        search_users.clearFocus();
+        search_users.clearFocus(); //取消初始焦點　27以下無效　28可以
         search_users.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -111,7 +111,7 @@ public class UsersFragment extends Fragment {
     }
 
     private void readUsers() {
-        //讀取使用者資料
+        //顯示所有使用者
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
 

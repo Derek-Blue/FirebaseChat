@@ -55,6 +55,8 @@ public class MessageActivity extends AppCompatActivity {
 
     ValueEventListener seenListener;
 
+    String userid;
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,9 +76,7 @@ public class MessageActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //停止監聽顯示已讀的功能
                 reference.removeEventListener(seenListener);
-                Intent i = new Intent(MessageActivity.this, MainActivity.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);   //釋放掉在此intent前開啟的Activity
-                startActivity(i);
+                finish();
             }
         });
 
@@ -92,7 +92,7 @@ public class MessageActivity extends AppCompatActivity {
         text_send = findViewById(R.id.text_send);
 
         intent = getIntent();
-        final String userID = intent.getStringExtra("userID");
+        userid = intent.getStringExtra("userID");
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         btn_send.setOnClickListener(new View.OnClickListener() {
@@ -100,7 +100,7 @@ public class MessageActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String msg = text_send.getText().toString();
                 if(!msg.equals("")){
-                    sendMessage(firebaseUser.getUid(),userID,msg);
+                    sendMessage(firebaseUser.getUid(),userid,msg);
                 }else {
                     Toast.makeText(MessageActivity.this , "請輸入訊息" , Toast.LENGTH_SHORT).show();
                 }
@@ -108,7 +108,7 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
 
-        reference = FirebaseDatabase.getInstance().getReference("Users").child(userID);//指定的使用者
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(userid);//指定的使用者
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -116,12 +116,12 @@ public class MessageActivity extends AppCompatActivity {
                 User user = dataSnapshot.getValue(User.class);
                 username.setText(user.getUsername());
                 if(user.getImageURL().equals("default")){
-                    profile_image.setImageResource(R.mipmap.frog);
+                    profile_image.setImageResource(R.mipmap.ic_launcher);
                 }else {
                     Glide.with(getApplicationContext()).load(user.getImageURL()).into(profile_image);
                 }
 
-                readMessage(firebaseUser.getUid(),userID,user.getImageURL());
+                readMessage(firebaseUser.getUid(),userid,user.getImageURL());
             }
 
             @Override
@@ -130,7 +130,7 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
 
-        seenMessage(userID);
+        seenMessage(userid);
     }
 
     private void seenMessage(final String id){
@@ -156,7 +156,7 @@ public class MessageActivity extends AppCompatActivity {
         });
     }
 
-    public void sendMessage(String sender , String receiver , String Message){
+    public void sendMessage(final String sender , final String receiver , String Message){
 
         //聊天資料傳到Database
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
@@ -170,6 +170,26 @@ public class MessageActivity extends AppCompatActivity {
 
         //聊天資料上傳Database ; 建立並放置於Chats根目錄下
         reference.child("Chats").push().setValue(hashMap);
+
+        //有過聊天紀錄後 創一個與該使用者的聊天室連結
+        final DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference("Chatlist")
+                .child(firebaseUser.getUid())
+                .child(userid);
+
+        chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()){
+                    chatRef.child("chatwith").setValue(receiver);
+                    chatRef.child("myid").setValue(sender);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void readMessage(final String myid, final String userid , final String imageurl){
@@ -230,9 +250,7 @@ public class MessageActivity extends AppCompatActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         //停止監聽顯示已讀的功能
         reference.removeEventListener(seenListener);
-        Intent i = new Intent(MessageActivity.this, MainActivity.class);
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(i);
+        finish();
 
         return super.onKeyDown(keyCode, event);
     }
