@@ -117,7 +117,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     });
 
                         }else {
-                            Toast.makeText(RegisterActivity.this, email+" 此信箱已註冊",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterActivity.this, "此信箱已註冊 or 信箱格式錯誤",Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

@@ -115,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 //釋放掉在此intent前開啟的Activity
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                finish();
                 return true;
         }
         return false;

@@ -66,7 +66,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             holder.last_mag.setVisibility(View.GONE);
         }
 
-         //判斷上線/離線
+         //上線/離線 監聽開關  此專案區分好友List(關)聊天List(開)
         if(ischat){
             if (user.getStatus().equals("online")){
                 holder.status_on.setVisibility(View.VISIBLE);
@@ -112,23 +112,27 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             status_on = itemView.findViewById(R.id.status_on);
             status_off = itemView.findViewById(R.id.status_off);
             last_mag = itemView.findViewById(R.id.last_msg);
+
         }
     }
 
-    private void setLastMesagge(final String userid , final TextView last_msg){
+    private void setLastMesagge( final String userid , final TextView last_msg){
         //顯示最後一則留言
         theLastMesagge = "default";
-        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Chats");
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    Chat chat = snapshot.getValue(Chat.class);
-                    if (chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userid) ||
-                            chat.getReceiver().equals(userid) && chat.getSender().equals(firebaseUser.getUid())){
-                        theLastMesagge = chat.getMessage();
+                //在尚無context的class下先必須告知 如果有FirebaseAuth 才做，否則登出時會報錯 on null object
+                if(FirebaseAuth.getInstance().getCurrentUser() != null) {
+                    final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Chat chat = snapshot.getValue(Chat.class);
+                        if (chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userid) ||
+                                chat.getReceiver().equals(userid) && chat.getSender().equals(firebaseUser.getUid())) {
+                            theLastMesagge =chat.getMessage();
+                        }
                     }
                 }
 
