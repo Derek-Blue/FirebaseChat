@@ -57,12 +57,13 @@
         android:layout_below="@+id/username"
         android:layout_toRightOf="@+id/user_image"
         android:layout_marginTop="30dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="10dp"
         android:paddingTop="5dp"
         android:maxLines="1"
         android:ellipsize="end"
-        android:textColor="#B2B2B4"
-        android:id="@+id/last_msg"/>
+        android:textColor="#B2B2B2"
+        android:id="@+id/last_msg"
+        android:textSize="12dp" />
 
 
 </RelativeLayout>

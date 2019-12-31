@@ -129,9 +129,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                     final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Chat chat = snapshot.getValue(Chat.class);
-                        if (chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userid) ||
-                                chat.getReceiver().equals(userid) && chat.getSender().equals(firebaseUser.getUid())) {
+                        if (chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userid)) {
                             theLastMesagge =chat.getMessage();
+                        }else if (chat.getReceiver().equals(userid) && chat.getSender().equals(firebaseUser.getUid())){
+                            theLastMesagge ="已回覆: "+chat.getMessage();
                         }
                     }
                 }

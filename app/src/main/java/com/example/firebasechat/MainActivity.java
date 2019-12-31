@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.example.firebasechat.Fragments.ChatFragment;
 import com.example.firebasechat.Fragments.ProfileFragment;
 import com.example.firebasechat.Fragments.UsersFragment;
+import com.example.firebasechat.Model.Chat;
 import com.example.firebasechat.Model.User;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -68,10 +69,11 @@ public class MainActivity extends AppCompatActivity {
         reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
 
         reference.addValueEventListener(new ValueEventListener() {
-            //監聽資料變動
+            //取得本人資料
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // DataSnapshot取得reference目前指定的目錄或節點下資料　節點下的資料内容以嵌套方式映射到User.Class容器
+                // 節點標籤名稱 與 容器變數名稱 必須大小寫一致
                 User user = dataSnapshot.getValue(User.class);
                 username.setText(user.getUsername());
                 if(user.getImageURL().equals("default")){
@@ -87,17 +89,44 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        TabLayout tabLayout = findViewById(R.id.tab_layout);
-        ViewPager viewPager = findViewById(R.id.view_pager);
+        final TabLayout tabLayout = findViewById(R.id.tab_layout);
+        final ViewPager viewPager = findViewById(R.id.view_pager);
 
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        reference = FirebaseDatabase.getInstance().getReference("Chats");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+                int unread = 0;
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Chat chat = snapshot.getValue(Chat.class);
+                    if (chat.getReceiver().equals(firebaseUser.getUid()) && !chat.isSeen()) {
+                        unread++;
+                    }
+                }
 
-        viewPagerAdapter.addFragment(new UsersFragment(),"好友");
-        viewPagerAdapter.addFragment(new ChatFragment(),"聊天");
-        viewPagerAdapter.addFragment(new ProfileFragment(),"個人檔案");
+                viewPagerAdapter.addFragment(new UsersFragment(),"好友");
 
-        viewPager.setAdapter(viewPagerAdapter);
-        tabLayout.setupWithViewPager(viewPager);
+                //未讀資訊顯示在Title
+                if (unread == 0){
+                    viewPagerAdapter.addFragment(new ChatFragment(),"聊天");
+                }else {
+                    viewPagerAdapter.addFragment(new ChatFragment(),"("+unread+")聊天");
+                }
+
+                viewPagerAdapter.addFragment(new ProfileFragment(),"個人檔案");
+
+                viewPager.setAdapter(viewPagerAdapter);
+                tabLayout.setupWithViewPager(viewPager);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     @Override
@@ -108,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        //右上登出鍵
         switch (item.getItemId()){
             case R.id.logout:
                 FirebaseAuth.getInstance().signOut();
@@ -143,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
         public int getCount() {
             return fragments.size();
         }
+
         public void addFragment(Fragment fragment ,String title){
             fragments.add(fragment);
             titles.add(title);
