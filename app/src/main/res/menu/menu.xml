@@ -7,4 +7,9 @@
         android:title="登出"
         app:showAsAction="never"/>
 
+    <item
+        android:id="@+id/profile"
+        android:title="設定檔案"
+        app:showAsAction="never"/>
+
 </menu>

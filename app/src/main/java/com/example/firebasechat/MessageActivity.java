@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -88,8 +89,9 @@ public class MessageActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //停止監聽顯示已讀的功能
                 reference.removeEventListener(seenListener);
-
-                startActivity(new Intent(MessageActivity.this, MainActivity.class));
+                Intent intent = new Intent(MessageActivity.this, MainActivity.class);
+                intent.putExtra("page", 1);
+                startActivity(intent);
                 finish();
             }
         });
@@ -97,9 +99,9 @@ public class MessageActivity extends AppCompatActivity {
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
 
         recyclerView = findViewById(R.id.recycle_view);
-        recyclerView.setHasFixedSize(true);//大小不取決於Adapter的內容 確保顯示大小一致
+        recyclerView.setHasFixedSize(true);//recyclerView的大小不會因為Adapter的內容改變
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-        linearLayoutManager.setStackFromEnd(true);//recyclerView新添加的item從下方新增;聊天內容由下往上新增
+        linearLayoutManager.setStackFromEnd(true);//設定recyclerView新添加的item從下方新增;聊天內容由下往上新增
         recyclerView.setLayoutManager(linearLayoutManager);
 
         profile_image = findViewById(R.id.profile_image);
@@ -300,6 +302,13 @@ public class MessageActivity extends AppCompatActivity {
 
     }
 
+    private void currentUser(String userid){
+        //用在: 當進入聊天室內 該對象的發言不發NOTIFY
+        SharedPreferences.Editor editor = getSharedPreferences("PREFS",MODE_PRIVATE).edit();
+        editor.putString("currentuser", userid);
+        editor.apply();
+    }
+
     private void status(String status){
         //監控上線/離線
         reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
@@ -314,6 +323,7 @@ public class MessageActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         status("online");
+        currentUser(userid);
     }
 
     @Override
@@ -322,14 +332,16 @@ public class MessageActivity extends AppCompatActivity {
         status("offline");
         //停止監聽顯示已讀的功能
         reference.removeEventListener(seenListener);
+        currentUser("none");
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         //停止監聽顯示已讀的功能
         reference.removeEventListener(seenListener);
-
-        startActivity(new Intent(MessageActivity.this, MainActivity.class));
+        Intent intent = new Intent(MessageActivity.this, MainActivity.class);
+        intent.putExtra("page", 1);
+        startActivity(intent);
         finish();
 
         return super.onKeyDown(keyCode, event);

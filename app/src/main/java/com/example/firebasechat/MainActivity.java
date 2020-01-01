@@ -13,8 +13,10 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 
@@ -45,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
 
     FirebaseUser firebaseUser;
     DatabaseReference reference;
+
+    ViewPager viewPager;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -90,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         final TabLayout tabLayout = findViewById(R.id.tab_layout);
-        final ViewPager viewPager = findViewById(R.id.view_pager);
+        viewPager = findViewById(R.id.view_pager);
 
         reference = FirebaseDatabase.getInstance().getReference("Chats");
         reference.addValueEventListener(new ValueEventListener() {
@@ -118,6 +122,12 @@ public class MainActivity extends AppCompatActivity {
 
                 viewPager.setAdapter(viewPagerAdapter);
                 tabLayout.setupWithViewPager(viewPager);
+
+                Intent i = getIntent();
+                int page = i.getIntExtra("page",0);
+                if (page != 0) {
+                    viewPager.setCurrentItem(page);
+                }
 
             }
 
@@ -147,6 +157,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
                 return true;
+            case R.id.profile:
+                viewPager.setCurrentItem(2);
         }
         return false;
     }
