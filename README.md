@@ -1,4 +1,4 @@
-Firebase Chat App / Firebase API串連實作
+Firebase Chat App 
 ================
 
 
