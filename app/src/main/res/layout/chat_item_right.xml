@@ -6,7 +6,7 @@
     android:padding="8dp">
 
     <RelativeLayout
-        android:layout_width="300dp"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true">
@@ -34,8 +34,23 @@
             android:layout_height="wrap_content"
             android:id="@+id/text_seen"
             android:layout_toLeftOf="@+id/show_message"
-            android:layout_centerInParent="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="2dp"
             android:layout_marginRight="2dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/uptime"
+            android:layout_toLeftOf="@+id/show_message"
+            android:layout_below="@id/text_seen"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="2dp"
+            android:layout_alignBottom="@id/show_message"
+            android:layout_marginBottom="3dp"
+            android:inputType="time"/>
+
+
 
     </RelativeLayout>
 

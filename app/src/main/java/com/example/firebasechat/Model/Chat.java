@@ -7,12 +7,14 @@ public class Chat {
     private String receiver;
     private String Message;
     private boolean seen;
+    private String uptime;
 
-    public Chat(String sender, String receiver, String Message, boolean seen) {
+    public Chat(String sender, String receiver, String Message, boolean seen, String uptime) {
         this.sender = sender;
         this.receiver = receiver;
         this.Message = Message;
         this.seen = seen;
+        this.uptime = uptime;
     }
 
     public Chat() {
@@ -48,5 +50,13 @@ public class Chat {
 
     public void setSeen(boolean seen) {
         this.seen = seen;
+    }
+
+    public String getUptime() {
+        return uptime;
+    }
+
+    public void setUptime(String uptime) {
+        this.uptime = uptime;
     }
 }

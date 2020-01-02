@@ -56,6 +56,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
         Chat chat = mChat.get(position);
         holder.show_message.setText(chat.getMessage());
+        holder.uptime.setText(chat.getUptime());
 
         if (imageURL.equals("default")){
             holder.item_image.setImageResource(R.mipmap.ic_launcher);
@@ -82,6 +83,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
         public TextView show_message;
         public ImageView item_image;
+        public TextView uptime;
 
         public TextView text_seen;
 
@@ -91,6 +93,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             show_message = itemView.findViewById(R.id.show_message);
             item_image = itemView.findViewById(R.id.item_image);
             text_seen = itemView.findViewById(R.id.text_seen);
+            uptime = itemView.findViewById(R.id.uptime);
         }
     }
 

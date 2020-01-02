@@ -38,9 +38,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TimeZone;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -182,17 +185,24 @@ public class MessageActivity extends AppCompatActivity {
         //聊天資料傳到Database
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
+        //取得"台北時區"時間
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Taipei"));
+        Calendar calendar = Calendar.getInstance();
+        String uptime = simpleDateFormat.format(calendar.getTime());
+
         HashMap<String , Object> hashMap = new HashMap<>();
         //上傳後會依下列"名稱"建立節點及對應值
         hashMap.put("sender" , sender);
         hashMap.put("receiver" , receiver);
         hashMap.put("Message" , Message);
         hashMap.put("seen" , false);
+        hashMap.put("uptime", uptime);
 
         //聊天資料上傳Database ; 建立並放置於Chats根目錄下
         reference.child("Chats").push().setValue(hashMap);
 
-        //有過聊天紀錄後 創一個與該使用者的聊天室連結
+        //有過聊天紀錄後 創一個與該使用者的聊天室連結　
         final DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference("Chatlist")
                 .child(firebaseUser.getUid())
                 .child(userid);
