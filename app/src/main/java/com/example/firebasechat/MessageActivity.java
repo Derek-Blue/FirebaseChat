@@ -252,7 +252,7 @@ public class MessageActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Token token = snapshot.getValue(Token.class);
-                    Data data =new Data(firebaseUser.getUid(),R.mipmap.ic_launcher,username+": "+message, "有新訊息",userid);
+                    Data data =new Data(firebaseUser.getUid(),R.mipmap.msg,username+": "+message, "有新訊息",userid);
 
                     Sender sender = new Sender(data, token.getToken());
 

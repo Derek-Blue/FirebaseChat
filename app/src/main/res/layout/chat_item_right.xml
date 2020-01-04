@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:padding="8dp">
 
     <RelativeLayout
-        android:layout_width="350dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true">
@@ -19,6 +19,7 @@
 
         <TextView
             android:layout_width="wrap_content"
+            android:maxWidth="310dp"
             android:layout_height="wrap_content"
             android:background="@drawable/background_right"
             android:textColor="#FFF"
@@ -34,21 +35,19 @@
             android:layout_height="wrap_content"
             android:id="@+id/text_seen"
             android:layout_toLeftOf="@+id/show_message"
-            android:layout_alignParentTop="true"
+            android:layout_above="@+id/uptime"
             android:layout_marginTop="2dp"
-            android:layout_marginRight="2dp"/>
+            android:layout_marginRight="2dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/uptime"
             android:layout_toLeftOf="@+id/show_message"
-            android:layout_below="@id/text_seen"
             android:layout_centerInParent="true"
-            android:layout_marginRight="2dp"
+            android:layout_marginRight="3dp"
             android:layout_alignBottom="@id/show_message"
-            android:layout_marginBottom="3dp"
-            android:inputType="time"/>
+            android:inputType="time" />
 
 
 
