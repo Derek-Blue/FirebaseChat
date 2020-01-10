@@ -35,15 +35,13 @@ public class RegisterActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     DatabaseReference reference;
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        //獲取狀態欄改變背景顏色,  API Level 21(5.0)以下可能會報錯
-        Window window = this.getWindow();
-        window.setStatusBarColor(getResources().getColor(R.color.colorGreen500));
+        //獲取狀態欄改變背景顏色
+        getWindow().setStatusBarColor(getColor(R.color.colorGreen500));
 
         //ToolBar設定
         Toolbar actbar = findViewById(R.id.actbar);

@@ -31,15 +31,13 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     TextView forgot_password;
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //獲取狀態欄改變背景顏色 API Level21(5.0)以下可能會報錯
-        Window window = this.getWindow();
-        window.setStatusBarColor(getResources().getColor(R.color.colorBlue500));
+        //獲取狀態欄改變背景顏色
+        getWindow().setStatusBarColor(getColor(R.color.colorBlue500));
 
         //ToolBar設定
         Toolbar actbar = findViewById(R.id.actbar);

@@ -50,15 +50,13 @@ public class MainActivity extends AppCompatActivity {
 
     ViewPager viewPager;
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //獲取狀態欄改變背景顏色 API Level21(5.0)以下可能會報錯
-        Window window = this.getWindow();
-        window.setStatusBarColor(getResources().getColor(R.color.colorOrange500));
+        //獲取狀態欄改變背景顏色
+        getWindow().setStatusBarColor(getColor(R.color.colorOrange500));
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
